@@ -49,10 +49,60 @@ class Students extends Component
             'phone' => 'required',
         ]);
         Student::create($validatedData);
-        session()->flash('message', '新規投稿に成功しました。');
+        session()->flash('message', 'successed create new user');
         $this->resetInputFields();
         $this->closeModal();
     }
+
+    public $modalUpdateStatus;
+
+    public function openUpdateModal($id) //
+        {
+            $student = Student::where('id', $id)->first();
+            $this->ids = $student->id;
+            $this->firstname = $student->firstname;
+            $this->lastname = $student->lastname;
+            $this->email = $student->email;
+            $this->phone = $student->phone;
+            $this->modalUpdateStatus = true;
+        }
+
+    public function closeUpdateModal()
+        {
+            $this->modalUpdateStatus = false;
+        }
+
+    public function update()
+        {
+            $validatedData = $this->validate([
+                'firstname' => 'required',
+                'lastname' => 'required',
+                'email' => 'required|email',
+                'phone' => 'required',
+            ]);
+            if ($this->ids) {
+                $student = Student::find($this->ids);
+                $student->update([
+                    'firstname' => $this->firstname,
+                    'lastname' => $this->lastname,
+                    'email' => $this->email,
+                    'phone' => $this->phone,
+                ]);
+                session()->flash('message', '投稿の編集に成功しました。');
+                $this->resetInputFields();
+                $this->closeUpdateModal();
+            }
+        }
+
+    public function delete($id)
+        {
+            if($id)
+            {
+                Student::where('id', $id)->delete();
+                session()->flash('message', '投稿の削除に成功しました。');
+            }
+        }
+
 
 }
 
