@@ -16,5 +16,9 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
         //10人分のStudentのデータを入れる
         \App\Models\Student::factory(10)->create();
+
+        $this->call([
+            UsersTableSeeder::class, // User追加のseederを呼び出すように追加
+        ]);
     }
 }
